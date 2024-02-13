@@ -1,0 +1,60 @@
+---
+title: "Quiz6"
+format: html
+editor: visual
+---
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(corrplot)
+
+# Simulate the data
+set.seed(123) # Ensures reproducibility
+hours <- 9:16
+employee_1 <- round(runif(8, 5, 10)) # Randomly generated numbers between 5 and 10
+employee_2 <- round(employee_1 * runif(8, 0.8, 1.2)) # Mild positive correlation
+
+data <- data.frame(Hour=hours, Employee1=employee_1, Employee2=employee_2)
+
+# Test 1: Correlation test
+correlation <- cor(data$Employee1, data$Employee2)
+print(paste("Correlation between Employee 1 and 2:", correlation))
+
+# Test 2: Average number of customers
+avg_emp1 <- mean(data$Employee1)
+avg_emp2 <- mean(data$Employee2)
+print(paste("Average customers served by Employee 1:", avg_emp1))
+print(paste("Average customers served by Employee 2:", avg_emp2))
+
+# Test 3: Identify peak hours
+peak_hours <- data[data$Employee1 + data$Employee2 == max(data$Employee1 + data$Employee2), ]
+print("Peak hours (most customers served):")
+print(peak_hours)
+
+# Test 4: Variability test
+var_emp1 <- var(data$Employee1)
+var_emp2 <- var(data$Employee2)
+print(paste("Variability in customers served by Employee 1:", var_emp1))
+print(paste("Variability in customers served by Employee 2:", var_emp2))
+
+# Test 5: Total customers served target
+total_customers <- sum(data$Employee1 + data$Employee2)
+target_customers <- 100 # Hypothetical target
+print(paste("Total customers served:", total_customers))
+print(ifelse(total_customers >= target_customers, "Target met", "Target not met"))
+```
+
+
+```{r}
+# Optional: Plot the efficiencies for visual inspection
+ggplot(data, aes(x = Hour)) + 
+  geom_line(aes(y = Employee1, color = "Employee 1")) + 
+  geom_line(aes(y = Employee2, color = "Employee 2")) +
+  geom_point(aes(y = Employee1, color = "Employee 1")) +
+  geom_point(aes(y = Employee2, color = "Employee 2")) +
+  labs(y = "Customers Served", x = "Hour", title = "Employee Efficiency Throughout the Day") +
+  theme_minimal() +
+  scale_color_manual(values = c("Employee 1" = "blue", "Employee 2" = "red"))
+
+```
+
